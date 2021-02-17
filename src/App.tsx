@@ -1,8 +1,11 @@
-import { useState } from "react";
-
 /**
- * Key takeaway: children can have their own independent state
+ * Key takeaway: we can use map in combination with higher-order
+ *  functions to make our code more concise
+ *
+ * TASK: replace the QWERTY row by also using a map
  */
+
+import { useState } from "react";
 
 function App() {
   const [typed, setTyped] = useState("");
@@ -11,7 +14,7 @@ function App() {
    * A higher-order function - returns a function
    */
   const makeHandlerToAppend = (input: number | string) => {
-    // adds input to previous state with update function
+    // this handler appends input to previous state
     return () => setTyped((prevState) => `${prevState}${input}`);
   };
 
@@ -24,15 +27,21 @@ function App() {
 
   const numRow = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
   const numberButtons = numRow.map((key) => (
-    <button onClick={makeHandlerToAppend(key)}>{key}</button>
+    // we could have done a big onClick here
+    //  like onClick={() => setTyped(...)}
+    //  but using our handler is more readable
+    <button key={key} onClick={makeHandlerToAppend(key)}>
+      {key}
+    </button>
   ));
 
   return (
     <div>
       <h1>Mini keyboard</h1>
-      <p>Typed: {setTyped}</p>
+      <p>Typed: {typed}</p>
       <div>{numberButtons}</div>
       <div>
+        {/* TODO: refactor to use a map */}
         <button onClick={makeHandlerToAppend("q")}>Q</button>
         <button onClick={makeHandlerToAppend("w")}>W</button>
         <button onClick={makeHandlerToAppend("e")}>E</button>
